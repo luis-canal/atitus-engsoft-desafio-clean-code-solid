@@ -1,24 +1,33 @@
-function calcularDesconto(cliente, valor) {
-  if (cliente.tipo === 'premium') {
+const descontos = {
+  premium: (cliente, valor) => {
     if (valor > 1000) {
-      if (cliente.anosCadastro > 5) {
-        return valor * 0.20;
-      } else {
-        return valor * 0.15;
-      }
-    } else if (valor > 500) {
-      return valor * 0.10;
-    } else {
-      return valor * 0.05;
+      return valor * (cliente.anosCadastro > 5 ? 0.20 : 0.15);
     }
-  } else if (cliente.tipo === 'gold') {
+
+    if (valor > 500) {
+      return valor * 0.10;
+    }
+
+    return valor * 0.05;
+  },
+
+  gold: (cliente, valor) => {
     if (valor > 1000) {
       return valor * 0.10;
-    } else {
-      return valor * 0.02;
     }
+
+    return valor * 0.02;
   }
-  return 0;
+};
+
+function calcularDesconto(cliente, valor) {
+  const regraDesconto = descontos[cliente.tipo];
+
+  if (!regraDesconto) {
+    return 0;
+  }
+
+  return regraDesconto(cliente, valor);
 }
 
 module.exports = calcularDesconto;
